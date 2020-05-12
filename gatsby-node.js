@@ -22,9 +22,9 @@ exports.createPages = async ({graphql, actions,reporter})=>{
         `
     );
 
-    if (result.error){
-        reporter.panic('Error loading lessons',JSON.stringify(result.errors));
-    }
+    // if (result.error){
+    //     reporter.panic('Error loading lessons',JSON.stringify(result.errors));
+    // }
     const lessonsTemplate = require.resolve(`./src/templates/lesson-template.js`)
     result.data.allContentfulLesson.nodes.forEach(lesson =>{
         createPage({
