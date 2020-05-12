@@ -35,8 +35,8 @@ const LessonTemplate =({data:{lesson}})=>(
             {documentToReactComponents(lesson.description.json,{
                 renderNode: {
                             [BLOCKS.EMBEDDED_ASSET]:(node,children)=> (
-                            <img style={{maxWidth:300}}
-                                src={node.data.target.fields.file["en-US"].url}
+                            <img
+                                src={`${node.data.target.fields.file["en-US"].url}?w=300&q=90`}
                                 alt= {node.data.target.fields.title["en-US"]}
                             />
                             ),
