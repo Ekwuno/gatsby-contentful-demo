@@ -1,6 +1,7 @@
 import React from "react"
 import {graphql} from 'gatsby'
-
+import {documentToReactComponents} from '@contentful/rich-text-react-renderer'
+import {BLOCKS} from '@contentful/rich-text-types'
 export const query = graphql`
 query($slug: String!){
 
@@ -29,7 +30,19 @@ query($slug: String!){
 const LessonTemplate =({data:{lesson}})=>(
     <>
         <h1>{lesson.title}</h1>
-<p>Guest: {lesson.author.name} - <a href={lesson.author.twitter}>Twitter</a></p>
+        <p>Guest: {lesson.author.name} - <a href={lesson.author.twitter}>Twitter</a></p>
+        <div>
+            {documentToReactComponents(lesson.description.json,{
+                renderNode: {
+                            [BLOCKS.EMBEDDED_ASSET]:(node,children)=> (
+                            <img style={{maxWidth:300}}
+                                src={node.data.target.fields.file["en-US"].url}
+                                alt= {node.data.target.fields.title["en-US"]}
+                            />
+                            ),
+                    },
+    })}
+</div>
     </>
 )
 
