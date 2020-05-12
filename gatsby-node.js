@@ -6,31 +6,32 @@
 
 // You can delete this file if you're not using it
 
-exports.createPages = async ({graphql, actions})=>{
+exports.createPages = async ({graphql, actions,reporter})=>{
     const {createPage} = actions
 
     const result = await graphql(
-        `query SiteQuery {
-            allContentfulAuthor(limit: 100) {
-              edges {
-                node {
-                  
-                  tittle
-                  
-                }
+        `{
+            allContentfulLesson {
+              nodes {
+                slug
               }
             }
-          }         
+          }
+          
+                 
         `
-    )
-    const blogPostTemplate = require.resolve(`./src/templates/blog-post.js`)
-    result.data.allContentfulAuthor.edges.forEach(edge =>{
-        const blog = edge.node
+    );
+
+    if (result.error){
+        reporter.panic('Error loading lessons',JSON.stringify(result.errors));
+    }
+    const lessonsTemplate = require.resolve(`./src/templates/lesson-template.js`)
+    result.data.allContentfulLesson.nodes.forEach(lesson =>{
         createPage({
-            path: `/blog/${blog.tittle}/`,
-            component: blogPostTemplate,
+            path: `/${lesson.slug}/`,
+            component: lessonsTemplate,
             context: {
-                 tittle: blog.tittle,
+                slug:lesson.slug
             },
         })
     })
